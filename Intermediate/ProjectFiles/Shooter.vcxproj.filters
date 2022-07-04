@@ -36,6 +36,12 @@
     <Filter Include="Source\Shooter">
       <UniqueIdentifier>{E89F5254-55D1-3544-A4A1-A8FB6FBB79B2}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="..\..\Source\Shooter\Item.cpp">
+      <Filter>Source\Shooter</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Shooter\Item.h">
+      <Filter>Source\Shooter</Filter>
+    </ClInclude>
     <None Include="..\..\Source\Shooter\Shooter.Build.cs">
       <Filter>Source\Shooter</Filter>
     </None>
@@ -61,6 +67,12 @@
       <Filter>Source\Shooter</Filter>
     </ClCompile>
     <ClInclude Include="..\..\Source\Shooter\ShooterGameModeBase.h">
+      <Filter>Source\Shooter</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\Shooter\Weapon.cpp">
+      <Filter>Source\Shooter</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Shooter\Weapon.h">
       <Filter>Source\Shooter</Filter>
     </ClInclude>
   </ItemGroup>
