@@ -70,7 +70,7 @@ protected:
 	void StartCrosshairBulletFire();
 
 	UFUNCTION()
-	void FinishCrosshairBulletFire();	
+		void FinishCrosshairBulletFire();
 
 	void FireButtonPressed();
 	void FireButtonReleased();
@@ -78,7 +78,28 @@ protected:
 	void StartFireTimer();
 
 	UFUNCTION()
-	void AutoFireReset();
+		void AutoFireReset();
+
+	/* line trace for items under the crosshairs */
+	bool TraceUnderCrosshairs(FHitResult& OutHitResult, FVector& OutHitLocation);
+
+	/* trace for items if OverlappedItemCount > 0 */
+	void TraceForItems();
+
+	/* spawns a dfault weapon and equips it */
+	class AWeapon* SpawnDefaultWeapon();
+
+	/* takes a weapon and attaches it to the mesh */
+	void EquipWeapon(AWeapon* WeaponToEquip);
+
+	/* Detach weapon and let it fall to the ground */
+	void DropWeapon();
+
+	void SelectButtonPressed();
+	void SelectButtonReleased();
+
+	/* drops currently equiped weapon and equips TraceHitItem */
+	void SwapWeapon(AWeapon* WeaponToSwap);
 
 public:
 	// Called every frame
@@ -209,6 +230,36 @@ private:
 	/* Sets a timer between gunshots */
 	FTimerHandle AutoFireTimer;
 
+	/* true if we should trace every frame for items */
+	bool bShouldTraceForItems;
+
+	/* number of overlapped AItems */
+	int8 OverlappedItemCount;
+
+	/* the AItem we hit last frame */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Items, meta = (AllowPrivateAccess = "true"))
+		class AItem* TraceHitItemLastFrame;
+
+	/* currently equipped weapon */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
+		class AWeapon* EquippedWeapon;
+
+	/* set this in blueprint for the default weapon class */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
+		TSubclassOf<AWeapon> DefaultWeaponClass;
+
+	/* the item currently hit by our trace in TraceForItems (could be null) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
+		AItem* TraceHitItem;
+
+	/* Distance outward from the camera for the interp destination */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Items, meta = (AllowPrivateAccess = "true"))
+		float CameraInterpDistance;
+
+	/*Distance upward from the camera for the interp destination */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Items, meta = (AllowPrivateAccess = "true"))
+		float CameraInterpElevation;
+
 public:
 	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; };
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; };
@@ -217,4 +268,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 		float GetCrosshairSpreadMultiplier() const;
 
+	FORCEINLINE int8 GetOverlappedItemCount() const { return OverlappedItemCount; };
+
+	/* adds/subtracts to/from OverlappedItemCount and updates bShouldTraceForItems */
+	void IncrementOverlappedItemCount(int8 Amount);
+
+	FVector GetCameraInterpLocation();
+
+	void GetPickupItem(AItem* Item);
 };
